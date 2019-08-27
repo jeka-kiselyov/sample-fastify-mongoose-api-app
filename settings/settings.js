@@ -17,7 +17,7 @@ module.exports = {
 		enableLivereload: false,      /// enable LiveReload server. Set to true for dev env
 		enableWebpackWatch: false,    /// enable WebPack compiling. Set to true for dev env
 		enableWebpackBuild: true,    /// build frontend sources codes each start. Set to true for dev env
-		port: 9090
+		port: process.env.PORT || 9090
 	},
 	database: {
 		"database": process.env.MONGODB_URI || "mongodb://localhost:27017/fastivue",
