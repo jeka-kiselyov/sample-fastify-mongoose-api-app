@@ -1,0 +1,33 @@
+{
+  "name": "sample-fastify-mongoose-api-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "blueimp-md5": "^2.11.0",
+    "css-loader": "^3.2.0",
+    "element-ui": "^2.11.1",
+    "fastify": "^2.7.1",
+    "fastify-cookie": "^3.0.2",
+    "fastify-formbody": "^3.1.0",
+    "fastify-mongoose-api": "^1.0.9",
+    "livereload": "^0.8.0",
+    "lovacli": "^0.1.15",
+    "mongoose": "^5.6.9",
+    "v-clipboard": "^2.2.2",
+    "vue": "^2.6.10",
+    "vue-axios": "^2.1.4",
+    "vue-loader": "^15.7.1",
+    "vue-router": "^3.1.2",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.10",
+    "vuex": "^3.1.1",
+    "webpack": "^4.39.1"
+  }
+}
