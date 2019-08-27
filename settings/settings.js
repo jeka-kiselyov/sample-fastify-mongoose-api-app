@@ -14,8 +14,8 @@ module.exports = {
 		"models": path.join(__dirname, "../models"),
 	},
 	server: {
-		enableLivereload: true,      /// enable LiveReload server. Set to true for dev env
-		enableWebpackWatch: true,    /// enable WebPack compiling. Set to true for dev env
+		enableLivereload: false,      /// enable LiveReload server. Set to true for dev env
+		enableWebpackWatch: false,    /// enable WebPack compiling. Set to true for dev env
 		enableWebpackBuild: true,    /// build frontend sources codes each start. Set to true for dev env
 		port: 9090
 	},
