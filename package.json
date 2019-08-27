@@ -1,13 +1,13 @@
 {
   "name": "sample-fastify-mongoose-api-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jeka Kiselyov",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.19.0",
     "blueimp-md5": "^2.11.0",
