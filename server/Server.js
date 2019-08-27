@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require("webpack");
 const Fastify = require('fastify');
+const crypto = require('crypto');
 
 class Server extends LovaClass { /// LovaClass is also EventEmmiter
     constructor(params = {}) {
@@ -295,9 +296,11 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
                     await promise;
                     this.log("Compiled to "+this._outData[name].compiledFileName);
                     this._outData[name].content = fs.readFileSync(this._outData[name].compiledFileName);
+                    this._outData[name].etag = crypto.createHash('md5').update(this._outData[name].content).digest("hex");
                 } catch(e) {
                     this.log(e);
                     this._outData[name].content = null;
+                    this._outData[name].etag = 'null';
                 }  
 
 
@@ -323,12 +326,14 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
                     obj.content = content;
                     return obj;
                 } else {
-                    this._outData[name].content = fs.readFileSync(this._outData[name].fileName);                        
+                    this._outData[name].content = fs.readFileSync(this._outData[name].fileName);    
+                    this._outData[name].etag = crypto.createHash('md5').update(this._outData[name].content).digest("hex");                    
                 }            
             }
         } catch(e) {
             this.log(e);
             this._outData[name].content = null;
+            this._outData[name].etag = 'null';
         }
 
         return this._outData[name];
@@ -341,7 +346,14 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
     }
 
     async indexjs(req, res) {
+        let etag = req.headers['if-none-match'] || '';
         let outData = await this.getOutData('indexjs');
+
+        if (outData.etag && outData.etag === etag) {
+            return res.status(304).send();
+        }
+
+        res.header('ETag', outData.etag);
         res.header('content-type', outData.contentType);
         res.send(outData.content);
     }

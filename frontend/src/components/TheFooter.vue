@@ -2,7 +2,7 @@
 
   <el-footer>
     <div class="footer_row">
-      MIT &copy; Source Code: <a href="https://github.com/jeka-kiselyov/fastify-mongoose-api">fastify-mongoose-api</a>
+      MIT &copy; Source Code: <el-link  href="https://github.com/jeka-kiselyov/fastify-mongoose-api">fastify-mongoose-api</el-link>
     </div>
   </el-footer>
 
