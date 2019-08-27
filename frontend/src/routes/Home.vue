@@ -1,8 +1,15 @@
 <template>
 
-	<p>
-		This is the homepage.
-	</p>
+	<div>
+		<p>Sample application to check <el-link  href="https://github.com/jeka-kiselyov/fastify-mongoose-api">fastify-mongoose-api</el-link> in action.</p>
+
+		<p>Fastify plugin to create REST API based on Mongoose MongoDB models.</p>
+
+		<p>Username: admin</p>
+		<p>Password: admin</p>
+
+		<p><el-link href="/books">Manage Books</el-link> <el-link href="/authors">Manage Authors</el-link></p>
+	</div>
 
 </template>
 <script>
