@@ -91,7 +91,7 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
         // this._server.post('/api/auth', this.asyncWrap(this.auth));
 
         await this._server.ready();
-        await this._server.listen(this._port);
+        await this._server.listen(this._port, '0.0.0.0');
 
         this.log('Server listening at port #'+this._port);
 
