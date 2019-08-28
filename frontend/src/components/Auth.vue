@@ -19,6 +19,7 @@
 </template>
 <script>
 const md5 = require('blueimp-md5'); // the one with no dependecies
+import axios from 'axios';
 
 export default {
 	data() {
