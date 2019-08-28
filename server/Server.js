@@ -88,9 +88,6 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
         this._server.get('/index.js', {}, this.asyncWrap(this.indexjs));
         this._server.get('/robots.txt', {}, this.asyncWrap(this.robotstxt));
 
-        // this._server.post('/api/authNonce', this.asyncWrap(this.authNonce));
-        // this._server.post('/api/auth', this.asyncWrap(this.auth));
-
         await this._server.ready();
         await this._server.listen(this._port, '0.0.0.0');
 
@@ -135,134 +132,9 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
     asyncWrap(fn, checkAuth) {
         return async (req, res)=>{
             this.log('Server request: '+req.raw.url);
-            await fn.call(this, req, res);
-            // let authCheckPromise = null;
-
-
-            // if (checkAuth) {
-            //     authCheckPromise = new Promise((resolve, reject)=>{
-            //         let authCode = req.cookies.authCode || null;
-            //         for (let auth of this._authCodes) {
-            //             if (auth.authCode == authCode) {
-            //                 if (this._checkAuthIP) {
-            //                     if (auth.ip != req.connection.remoteAddress) {
-            //                         return resolve(false);
-            //                     }
-            //                 }
-            //                 if (this._checkAuthDate) {
-            //                     let now = new Date();
-            //                     if (!auth.date || ( Math.abs(now.getTime() - auth.date.getTime()) > this._maxAuthCodeAge * 1000 ) ) {
-            //                         return resolve(false);
-            //                     }
-            //                 }
-            //                 return resolve(true);
-            //             }
-            //         }
-            //         resolve(false);
-            //     });
-            // } else {
-            //     authCheckPromise = Promise.resolve(true);
-            // }
-
-            // authCheckPromise = Promise.resolve(true);
-
-            // authCheckPromise.then((authSuccess)=>{
-            //     if (!authSuccess) {
-            //         throw new errs.UnauthorizedError("Can you please auth first?");
-            //     }
-
-            //     return fn.call(this, req, res);
-            // }).then(function(results){
-            //     next();
-            // }).catch(function(err){
-            //     return next(err);
-            // });      
+            await fn.call(this, req, res); 
         };
     }
-
-    // async authNonce(req, res) {
-    //     let randomNonce = crypto.randomBytes(128).toString('hex');
-    //     this._authNonces.push(randomNonce);
-    //     if (this._authNonces.length > 10) {
-    //         /// store up to 10 last nonces. We are targeting simple tool apps here, so no more than 10 parallel 
-    //         /// signin are more than enough
-    //         this._authNonces = this._authNonces.slice(-10);
-    //     }
-
-    //     res.send({
-    //         nonce: randomNonce
-    //     });
-    // }
-
-    // async auth(req, res) {
-    //     let ret = {
-    //         success: false,
-    //         authCode: null
-    //     };
-
-    //     let username = req.params.username;
-    //     let passwordHash = req.params.password;
-
-    //     let hashIsGood = false;
-    //     for (let i = 0; i < this._authNonces.length; i++) {
-    //         let nonce = this._authNonces[i];
-
-    //         for (let credentials of this._credentials) {
-    //             if (username == credentials.username) {
-    //                 let hash = crypto.createHash('md5').update(''+nonce+''+credentials.password).digest("hex");
-    //                 if (hash == passwordHash) {
-    //                     hashIsGood = true;
-    //                     /// remove this nonce from authNonces. To be sure we use it once only
-    //                     this._authNonces.splice(i, 1);
-    //                 }                           
-    //             }         
-    //         }
-    //     }
-
-    //     if (hashIsGood) {
-    //         ret.success = true;
-    //         let authCode = crypto.randomBytes(128).toString('hex');
-    //         ret.authCode = authCode;
-
-    //         this._authCodes.push({
-    //             authCode: authCode,
-    //             ip: req.connection.remoteAddress,
-    //             date: new Date()
-    //         });
-
-    //         if (this._authCodes.length > 10) {
-    //             let now = new Date();
-
-    //             //// we are cleaning authCodes that are outdated
-    //             for (let i = 0; i < this._authCodes.length; i++) {
-    //                 let auth = this._authCodes[i];
-    //                 if (now.getTime() - auth.date.getTime() > this._maxAuthCodeAge*1000) {
-    //                     this._authCodes.splice(i, 1);
-    //                     i--; /// keep index on the next item even though it's moved, without this, we'd skip one item in the loop
-    //                 }
-    //             }
-
-    //             //// just limit the total count to 1000 to be sure we are not eating too much memory
-    //             this._authCodes = this._authCodes.slice(-1000);
-    //         }
-
-    //         let authCookieOptions = {
-    //         };
-
-    //         if (this._maxAuthCodeAge) {
-    //             authCookieOptions.maxAge = this._maxAuthCodeAge;
-    //         }
-
-    //         res.setCookie('authCode', authCode, authCookieOptions);   
-    //     }
-
-    //     if (!ret.success) {
-    //         res.status(401); 
-    //         res.send(ret);
-    //     } else {
-    //         res.send(ret);            
-    //     }
-    // }
 
     async getOutData(name) {
         if (this._outData[name] && this._outData[name].content !== null) {
@@ -319,16 +191,17 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
                 }
             } else {
                 this.log("Reading content from "+this._outData[name].fileName+"  ...");
-                if (this._outData[name].livereload) {
+                if (this._outData[name].livereload && this._enableLivereload) {
                     /// do not cache files for livereload. This is the quick hack for index.html
                     let content = fs.readFileSync(this._outData[name].fileName);
-                    let obj = Object.assign({}, this._outData[name]);
+                    let obj = Object.assign({}, this._outData[name]); 
                     obj.content = content;
                     return obj;
                 } else {
                     this._outData[name].content = fs.readFileSync(this._outData[name].fileName);    
-                    this._outData[name].etag = crypto.createHash('md5').update(this._outData[name].content).digest("hex");                    
+                    this._outData[name].etag = crypto.createHash('md5').update(this._outData[name].content).digest("hex"); 
                 }            
+
             }
         } catch(e) {
             this.log(e);
@@ -352,6 +225,8 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
         if (outData.etag && outData.etag === etag) {
             return res.status(304).send();
         }
+
+        console.log(outData);
 
         res.header('ETag', outData.etag);
         res.header('content-type', outData.contentType);
