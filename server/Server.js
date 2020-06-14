@@ -62,9 +62,9 @@ class Server extends LovaClass { /// LovaClass is also EventEmmiter
 
         this._port = params.port || 8080;
 
-        this._enableLivereload = params.enableLivereload || false;
-        this._enableWebpackWatch = params.enableWebpackWatch || false;
-        this._enableWebpackBuild = params.enableWebpackBuild || false;
+        this._enableLivereload = params.enableLivereload;
+        this._enableWebpackWatch = params.enableWebpackWatch;
+        this._enableWebpackBuild = params.enableWebpackBuild;
 	}
 
     log(str) {
