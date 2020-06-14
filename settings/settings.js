@@ -19,9 +19,9 @@ module.exports = {
 		"models": path.join(__dirname, "../models"),
 	},
 	server: {
-		enableLivereload: isHeroku ? false : true,      /// enable LiveReload server. Set to true for dev env
-		enableWebpackWatch: isHeroku ? false : true,    /// enable WebPack compiling. Set to true for dev env
-		enableWebpackBuild: isHeroku ? false : true,    /// build frontend sources codes each start. Set to true for dev env
+		enableLivereload: !isHeroku,      /// enable LiveReload server. Set to true for dev env
+		enableWebpackWatch: !isHeroku,    /// enable WebPack compiling. Set to true for dev env
+		enableWebpackBuild: !isHeroku,    /// build frontend sources codes each start. Set to true for dev env
 		port: process.env.PORT || 9090
 	},
 	database: {
