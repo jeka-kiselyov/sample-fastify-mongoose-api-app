@@ -1,6 +1,6 @@
 {
   "name": "sample-fastify-mongoose-api-app",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -13,10 +13,10 @@
     "blueimp-md5": "^2.11.0",
     "css-loader": "^3.2.0",
     "element-ui": "^2.11.1",
-    "fastify": "^2.7.1",
+    "fastify": "^3.8.0",
     "fastify-cookie": "^3.0.2",
-    "fastify-formbody": "^3.1.0",
-    "fastify-mongoose-api": "^1.0.9",
+    "fastify-formbody": "^5.0.0",
+    "fastify-mongoose-api": "^1.1.7",
     "livereload": "^0.8.0",
     "lovacli": "^0.1.15",
     "mongoose": "^5.6.9",

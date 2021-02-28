@@ -55,7 +55,7 @@ class ServerAuth {
         let randomNonce = crypto.randomBytes(128).toString('hex');
         this._authNonces.push(randomNonce);
         if (this._authNonces.length > this._maxAuthNoncesToStore) {
-            /// store up to 100 last nonces. We are targeting simple tool apps here, so no more than 100 parallel 
+            /// store up to 100 last nonces. We are targeting simple tool apps here, so no more than 100 parallel
             /// signin are more than enough
             this._authNonces = this._authNonces.slice(-this._maxAuthNoncesToStore);
         }
@@ -72,7 +72,7 @@ class ServerAuth {
 
         /// @todo: remove authCode from server storage
 
-        reply.setCookie('authCode', '', {path: '/'}); 
+        reply.setCookie('authCode', '', {path: '/'});
         reply.send(ret);
     }
 
@@ -95,7 +95,7 @@ class ServerAuth {
 	            if (hash == passwordHash) {
 	            	hashIsGood = true;
                     /// remove this nonce from authNonces. To be sure we use it once only
-                    this._authNonces.splice(i, 1);	            	
+                    this._authNonces.splice(i, 1);
 	            }
 	        }
         }
@@ -109,14 +109,14 @@ class ServerAuth {
 
             await this._storeAuthCode(foundUser, authCode);
 
-            reply.setCookie('authCode', authCode, {path: '/'}); 
+            reply.setCookie('authCode', authCode, {path: '/'});
         }
 
         if (!ret.success) {
-            reply.status(401); 
+            reply.status(401);
             reply.send(ret);
         } else {
-            reply.send(ret);            
+            reply.send(ret);
         }
     }
 }
@@ -132,7 +132,7 @@ function initPlugin(fastify, options, next) {
 };
 
 const plugin = fp(initPlugin, {
-	fastify: '^2.0.0',
+	fastify: '^3.0.0',
 	name: 'fastify-server-auth',
 	dependencies: ['fastify-formbody', 'fastify-cookie']
 });

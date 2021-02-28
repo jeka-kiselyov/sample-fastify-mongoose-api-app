@@ -26,6 +26,7 @@ class Handler extends Command {
         serverOptions.logger = logger;
 
         serverOptions.beforeInit = (fastify)=>{
+
             fastify.register(fastifyCookie);
             fastify.register(fastifyFormbody);
             fastify.register(fastifyServerAuth, {
@@ -36,18 +37,18 @@ class Handler extends Command {
                         return await user.storeAuthCode(authCode);
                     },
                     getUserByAuthCode: async (authCode)=>{
-                        return await this.db.User.byAuthCode(authCode);                        
+                        return await this.db.User.byAuthCode(authCode);
                     }
                 });
 
             fastify.register(fastifyMongooseAPI, {
                     models: this.db.connection.models,
                     checkAuth: (request, reply)=>{
-                        if (request.raw.originalUrl.indexOf('user') != -1) {
+                        if (request.raw.url.indexOf('user') != -1) {
                             /// just a quick way to disable /user/ and /user_authes/ routes on API
                             throw new Error('Cmon!');
                         }
-                        request.requireAuth();                        
+                        request.requireAuth();
                     },
                     prefix: '/api/',
                     setDefaults: true,
@@ -55,7 +56,7 @@ class Handler extends Command {
                 });
         };
 
-        let server = new Server(serverOptions);        
+        let server = new Server(serverOptions);
         await server.init();
     }
 };
